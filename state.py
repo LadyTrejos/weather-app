@@ -57,7 +57,6 @@ class WeatherState:
         state_entries = {}
         del data['Verb']
         state_entries[address] = self._serialize(data)
-        print("state entries: ", state_entries)
         return self._context.set_state(state_entries, timeout=self.TIMEOUT)
 
     def get_data(self, parameter, sensor, timestamp, context):
@@ -82,5 +81,4 @@ class WeatherState:
         for item in data.items():
             data_str = ",".join(map(str, item))
             data_strs.append(data_str)
-        print("fin serialize", "|".join(sorted(data_strs)).encode())
         return "|".join(sorted(data_strs)).encode()

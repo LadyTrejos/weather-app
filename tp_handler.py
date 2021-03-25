@@ -30,7 +30,6 @@ class WeatherHandler(TransactionHandler):
         return [self._namespace_prefix]
 
     def apply(self, transaction, context):
-        print("i'm inside handler print")
         # payload = {Verb: verb, Parameter: parameter, Value: value, Sensor: sensor, Timestamp: timestamp}
         payload = _decode_transaction(transaction)
 
