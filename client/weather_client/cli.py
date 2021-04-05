@@ -1,15 +1,41 @@
 import argparse
-from datetime import datetime
 import getpass
+import logging
 import pkg_resources
 import os
 import sys
 import traceback
+from datetime import datetime
+from colorlog import ColoredFormatter
 from client import Client
 
 DISTRIBUTION_NAME = 'sawtooth-weather'
-DEFAULT_URL = 'http://127.0.0.1:8008'
+DEFAULT_URL = 'http://rest-api:8008'
 
+
+def create_console_handler(verbose_level):
+    clog = logging.StreamHandler()
+    formatter = ColoredFormatter(
+        "%(log_color)s[%(asctime)s %(levelname)-8s%(module)s]%(reset)s "
+        "%(white)s%(message)s",
+        datefmt="%H:%M:%S",
+        reset=True,
+        log_colors={
+            'DEBUG': 'cyan',
+            'INFO': 'green',
+            'WARNING': 'yellow',
+            'ERROR': 'red',
+            'CRITICAL': 'red',
+        })
+
+    clog.setFormatter(formatter)
+    clog.setLevel(logging.DEBUG)
+    return clog
+
+def setup_loggers(verbose_level):
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(create_console_handler(verbose_level))
 
 def create_parent_parser(prog_name):
     parent_parser = argparse.ArgumentParser(prog=prog_name, add_help=False)
@@ -38,6 +64,7 @@ def create_parser(prog_name):
 
     parser = argparse.ArgumentParser(
         parents=[parent_parser],
+        description="Provides subcommands to manage weather application",
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     subparsers = parser.add_subparsers(title='subcommands', dest='command')
@@ -217,10 +244,14 @@ def main(prog_name=os.path.basename(sys.argv[0]), args=None):
     parser = create_parser(prog_name)
     args = parser.parse_args(args)
 
+    verbose_level = 0
+    setup_loggers(verbose_level=verbose_level)
+
     if not args.command:
         parser.print_help()
         sys.exit(1)
 
+    # Get the commands from cli args and call corresponding handlers
     if args.command == 'set':
         do_set(args)
     elif args.command == 'show':

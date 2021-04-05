@@ -2,9 +2,9 @@ from tp_handler import WeatherHandler
 from sawtooth_sdk.processor.core import TransactionProcessor
 from state import WEATHER_NAMESPACE
 
-if __name__ == '__main__':
+def main():
     try:
-        URL = 'tcp://validator:4004'
+        URL = 'tcp://localhost:4004'
         processor = TransactionProcessor(url=URL)
         handler = WeatherHandler(WEATHER_NAMESPACE)
         processor.add_handler(handler)
@@ -18,3 +18,6 @@ if __name__ == '__main__':
         if processor is not None:
             print("Stop processor")
             processor.stop()
+
+if __name__ == '__main__':
+    main()
