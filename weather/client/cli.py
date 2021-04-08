@@ -7,7 +7,7 @@ import sys
 import traceback
 from datetime import datetime
 from colorlog import ColoredFormatter
-from client import Client
+from client.client import Client
 
 DISTRIBUTION_NAME = 'sawtooth-weather'
 DEFAULT_URL = 'http://rest-api:8008'

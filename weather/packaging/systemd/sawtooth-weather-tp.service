@@ -1,0 +1,13 @@
+[Unit]
+Description=Sawtooth Weather TP Python
+After=network.target
+
+[Service]
+User=sawtooth
+Group=sawtooth
+EnvironmentFile=-/etc/default/sawtooth-Weather-tp
+ExecStart=/usr/bin/weather-tp $SAWTOOTH_WEATHER_TP_ARGS
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
