@@ -1,15 +1,14 @@
 import cbor
-import hashlib
-from sawtooth_sdk.processor.handler import TransactionHandler
-from sawtooth_sdk.processor.exceptions import InvalidTransaction
 from processor.state import WeatherState
+from sawtooth_sdk.processor.exceptions import InvalidTransaction
+from sawtooth_sdk.processor.handler import TransactionHandler
 
 
 def _decode_transaction(transaction):
     try:
         content = cbor.loads(transaction.payload)
     except Exception as e:
-        raise InvalidTransaction('Invalid payload serialization') from e
+        raise InvalidTransaction("Invalid payload serialization") from e
     return content
 
 
@@ -19,11 +18,11 @@ class WeatherHandler(TransactionHandler):
 
     @property
     def family_name(self):
-        return 'weather'
+        return "weather"
 
     @property
     def family_versions(self):
-        return ['1.0']
+        return ["1.0"]
 
     @property
     def namespaces(self):
@@ -35,8 +34,7 @@ class WeatherHandler(TransactionHandler):
 
         weather_state = WeatherState(context)
 
-        if payload['Verb'] == 'set':
+        if payload["Verb"] == "set":
             return weather_state.set_data(payload)
         else:
-            raise InvalidTransaction('Unhandled verb: {}'.format(
-                payload['Verb']))
+            raise InvalidTransaction("Unhandled verb: {}".format(payload["Verb"]))

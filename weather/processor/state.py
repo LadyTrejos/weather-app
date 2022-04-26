@@ -1,10 +1,8 @@
-import cbor
 import hashlib
 
 from sawtooth_sdk.processor.exceptions import InternalError
 
-
-WEATHER_NAMESPACE = hashlib.sha512('weather'.encode("utf-8")).hexdigest()[0:6]
+WEATHER_NAMESPACE = hashlib.sha512("weather".encode("utf-8")).hexdigest()[0:6]
 
 
 class Measure:
@@ -17,8 +15,7 @@ class Measure:
 
 def _make_weather_address(parameter, sensor, timestamp):
     name = parameter + sensor + timestamp
-    return WEATHER_NAMESPACE + \
-        hashlib.sha512(name.encode('utf-8')).hexdigest()[:64]
+    return WEATHER_NAMESPACE + hashlib.sha512(name.encode("utf-8")).hexdigest()[:64]
 
 
 def deserialize(data):
@@ -26,7 +23,7 @@ def deserialize(data):
     Args:
         data (bytes): The UTF-8 encoded string stored in state.
     Returns:
-        (dict): sensor data 
+        (dict): sensor data
     """
     try:
         dictionary = {}
@@ -53,9 +50,10 @@ class WeatherState:
 
     def set_data(self, data):
         address = _make_weather_address(
-            data['Parameter'], data['Sensor'], data['Timestamp'])
+            data["Parameter"], data["Sensor"], data["Timestamp"]
+        )
         state_entries = {}
-        del data['Verb']
+        del data["Verb"]
         state_entries[address] = self._serialize(data)
         return self._context.set_state(state_entries, timeout=self.TIMEOUT)
 
@@ -68,7 +66,7 @@ class WeatherState:
         except IndexError:
             return {}
         except Exception as e:
-            raise InternalError('Failed to load state data') from e
+            raise InternalError("Failed to load state data") from e
 
     def _serialize(self, data):
         """Takes a dict of sensor data objects and serializes them into bytes.

@@ -1,20 +1,30 @@
 import json
-import paho.mqtt.client as mqtt
 import sys
 import time
-import board
 from datetime import datetime
+
 import adafruit_dht
-#from weather_app.cli import do_set
+import board
+import paho.mqtt.client as mqtt
+
+
+# from weather_app.cli import do_set
+
 
 def make_payload(parameter, value, sensor, timestamp):
-    data = {"parameter": parameter, "value": value, "sensor": sensor, "timestamp": timestamp}
+    data = {
+        "parameter": parameter,
+        "value": value,
+        "sensor": sensor,
+        "timestamp": timestamp,
+    }
     return json.dumps(data).encode("utf-8")
+
 
 if __name__ == "__main__":
     # Initial the dht device, with data pin connected to:
     dhtDevice = adafruit_dht.DHT22(board.D4)
-    sensor = 'sensor_1' if len(sys.argv) < 2 else sys.argv[1]
+    sensor = "sensor_1" if len(sys.argv) < 2 else sys.argv[1]
 
     mqttBroker = "localhost"
     client = mqtt.Client(sensor)
@@ -28,11 +38,16 @@ if __name__ == "__main__":
     while True:
         try:
             # Print the values to the serial port
-            timestamp = datetime.now().isoformat('T', 'seconds')
+            timestamp = datetime.now().isoformat("T", "seconds")
             temperature_c = dhtDevice.temperature
             humidity = dhtDevice.humidity
-            client.publish('TEMPERATURE', make_payload('temperature', temperature_c, sensor, timestamp))
-            client.publish('HUMIDITY', make_payload('humidity', humidity, sensor, timestamp))
+            client.publish(
+                "TEMPERATURE",
+                make_payload("temperature", temperature_c, sensor, timestamp),
+            )
+            client.publish(
+                "HUMIDITY", make_payload("humidity", humidity, sensor, timestamp)
+            )
             print("Message published")
         except RuntimeError as error:
             # Errors happen fairly often, DHT's are hard to read, just keep going
@@ -47,6 +62,3 @@ if __name__ == "__main__":
             dhtDevice.exit()
 
         time.sleep(5.0)
-    
-    
-

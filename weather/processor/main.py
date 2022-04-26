@@ -1,45 +1,51 @@
-import sys
 import argparse
-import pkg_resources
-from sawtooth_sdk.processor.core import TransactionProcessor
+import sys
 
-from sawtooth_sdk.processor.log import init_console_logging
-from sawtooth_sdk.processor.log import log_configuration
+import pkg_resources
+from processor.state import WEATHER_NAMESPACE
+from processor.tp_handler import WeatherHandler
 from sawtooth_sdk.processor.config import get_log_config
 from sawtooth_sdk.processor.config import get_log_dir
+from sawtooth_sdk.processor.core import TransactionProcessor
+from sawtooth_sdk.processor.log import init_console_logging
+from sawtooth_sdk.processor.log import log_configuration
 
-from processor.tp_handler import WeatherHandler
-from processor.state import WEATHER_NAMESPACE
-
-DISTRIBUTION_NAME = 'sawtooth-weather'
-DEFAULT_URL = 'tcp://validator:4004'
+DISTRIBUTION_NAME = "sawtooth-weather"
+DEFAULT_URL = "tcp://validator:4004"
 
 
 def parse_args(args):
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument(
-        '-C', '--connect',
+        "-C",
+        "--connect",
         default=DEFAULT_URL,
-        help='Endpoint for the validator connection')
+        help="Endpoint for the validator connection",
+    )
 
-    parser.add_argument('-v', '--verbose',
-                        action='count',
-                        default=0,
-                        help='Increase output sent to stderr')
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="count",
+        default=0,
+        help="Increase output sent to stderr",
+    )
 
     try:
         version = pkg_resources.get_distribution(DISTRIBUTION_NAME).version
     except pkg_resources.DistributionNotFound:
-        version = 'UNKNOWN'
+        version = "UNKNOWN"
 
     parser.add_argument(
-        '-V', '--version',
-        action='version',
-        version=(DISTRIBUTION_NAME + ' (Hyperledger Sawtooth) version {}')
-        .format(version),
-        help='print version information')
+        "-V",
+        "--version",
+        action="version",
+        version=(DISTRIBUTION_NAME + " (Hyperledger Sawtooth) version {}").format(
+            version
+        ),
+        help="print version information",
+    )
 
     return parser.parse_args(args)
 
@@ -63,8 +69,8 @@ def main(args=None):
             log_dir = get_log_dir()
             # use the transaction processor zmq identity for filename
             log_configuration(
-                log_dir=log_dir,
-                name="weather-" + str(processor.zmq_id)[2:-1])
+                log_dir=log_dir, name="weather-" + str(processor.zmq_id)[2:-1]
+            )
 
         init_console_logging(verbose_level=opts.verbose)
 
@@ -83,5 +89,6 @@ def main(args=None):
         if processor is not None:
             processor.stop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
