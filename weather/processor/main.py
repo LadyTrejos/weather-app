@@ -2,13 +2,14 @@ import argparse
 import sys
 
 import pkg_resources
-from processor.state import WEATHER_NAMESPACE
-from processor.tp_handler import WeatherHandler
 from sawtooth_sdk.processor.config import get_log_config
 from sawtooth_sdk.processor.config import get_log_dir
 from sawtooth_sdk.processor.core import TransactionProcessor
 from sawtooth_sdk.processor.log import init_console_logging
 from sawtooth_sdk.processor.log import log_configuration
+
+from weather.processor.tp_handler import WeatherHandler
+from weather.utils import WEATHER_NAMESPACE
 
 DISTRIBUTION_NAME = "sawtooth-weather"
 DEFAULT_URL = "tcp://validator:4004"
@@ -25,7 +26,7 @@ def parse_args(args):
     )
 
     parser.add_argument(
-        "-v",
+        "-vv",
         "--verbose",
         action="count",
         default=0,

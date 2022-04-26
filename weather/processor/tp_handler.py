@@ -1,7 +1,8 @@
 import cbor
-from processor.state import WeatherState
 from sawtooth_sdk.processor.exceptions import InvalidTransaction
 from sawtooth_sdk.processor.handler import TransactionHandler
+
+from weather.processor.state import WeatherState
 
 
 def _decode_transaction(transaction):

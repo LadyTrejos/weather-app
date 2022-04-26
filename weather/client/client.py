@@ -6,7 +6,6 @@ import time
 import cbor
 import requests
 import yaml
-from sawtooth_sdk.processor.exceptions import InternalError
 from sawtooth_sdk.protobuf.batch_pb2 import Batch
 from sawtooth_sdk.protobuf.batch_pb2 import BatchHeader
 from sawtooth_sdk.protobuf.batch_pb2 import BatchList
@@ -17,34 +16,11 @@ from sawtooth_signing import ParseError
 from sawtooth_signing import create_context
 from sawtooth_signing.secp256k1 import Secp256k1PrivateKey
 
-WEATHER_NAMESPACE = hashlib.sha512("weather".encode("utf-8")).hexdigest()[0:6]
+from weather.utils import deserialize, make_weather_address
 
 
 def _sha512(data):
     return hashlib.sha512(data).hexdigest()
-
-
-def _make_weather_address(parameter, sensor, timestamp):
-    name = parameter + sensor + timestamp
-    return WEATHER_NAMESPACE + hashlib.sha512(name.encode("utf-8")).hexdigest()[:64]
-
-
-def deserialize(data):
-    """Take bytes and deserialize them into Python string
-    Args:
-        data (bytes): The UTF-8 encoded string stored in state.
-    Returns:
-        (dict): sensor data
-    """
-    try:
-        dictionary = {}
-        for measure in data.decode().split("|"):
-            key, value = measure.split(",")
-            dictionary[key] = value
-    except ValueError as e:
-        raise InternalError("Failed to deserialize sensor data") from e
-
-    return dictionary
 
 
 class Client:
@@ -78,7 +54,7 @@ class Client:
         )
 
     def show(self, parameter, sensor, timestamp):
-        address = _make_weather_address(parameter, sensor, timestamp)
+        address = make_weather_address(parameter, sensor, timestamp)
 
         result = self._send_request(
             "state/{}".format(address),
@@ -176,7 +152,7 @@ class Client:
         )
 
         # Construct the address
-        address = _make_weather_address(parameter, sensor, timestamp)
+        address = make_weather_address(parameter, sensor, timestamp)
 
         header = TransactionHeader(
             signer_public_key=self._signer.get_public_key().as_hex(),

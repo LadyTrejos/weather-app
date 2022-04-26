@@ -2,6 +2,7 @@
 /processor/__pycache__/
 /client/__pycache__/
 /weather/processor/__pycache__/
+/weather/__pycache__/
 /Sawtooth_Weather.egg-info/
 /venv/
 /.idea/
