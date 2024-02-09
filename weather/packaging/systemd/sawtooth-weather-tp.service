@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=sawtooth
 Group=sawtooth
-EnvironmentFile=-/etc/default/sawtooth-Weather-tp
+EnvironmentFile=-/etc/default/sawtooth-weather-tp
 ExecStart=/usr/bin/weather-tp $SAWTOOTH_WEATHER_TP_ARGS
 Restart=on-failure
 

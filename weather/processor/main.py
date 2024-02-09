@@ -12,7 +12,7 @@ from weather.processor.tp_handler import WeatherHandler
 from weather.utils import WEATHER_NAMESPACE
 
 DISTRIBUTION_NAME = "sawtooth-weather"
-DEFAULT_URL = "tcp://validator:4004"
+DEFAULT_URL = "tcp://localhost:4004"
 
 
 def parse_args(args):
@@ -59,19 +59,6 @@ def main(args=None):
     try:
         processor = TransactionProcessor(url=opts.connect)
         log_config = get_log_config(filename="weather_log_config.toml")
-
-        # If no toml, try loading yaml
-        if log_config is None:
-            log_config = get_log_config(filename="weather_log_config.yaml")
-
-        if log_config is not None:
-            log_configuration(log_config=log_config)
-        else:
-            log_dir = get_log_dir()
-            # use the transaction processor zmq identity for filename
-            log_configuration(
-                log_dir=log_dir, name="weather-" + str(processor.zmq_id)[2:-1]
-            )
 
         init_console_logging(verbose_level=opts.verbose)
 

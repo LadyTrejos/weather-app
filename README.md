@@ -1,3 +1,7 @@
+# Prerrequisitos
+Añadir al `export PYTHONPATH="${PYTHONPATH}:<path_to_weather_dict>"`
+
+# Uso en dev
 Para usarlo en desarrollo con Sawtooth en Ubuntu, se debe iniciar:
 * El validador `sudo -u sawtooth sawtooth-validator -vv`
 * El motor de consenso Devmode `sudo -u sawtooth devmode-engine-rust -vv --connect tcp://localhost:5050`
@@ -5,7 +9,7 @@ Para usarlo en desarrollo con Sawtooth en Ubuntu, se debe iniciar:
 * El procesador de transacciones de configuración `sudo -u sawtooth settings-tp -v`
 * Luego se ejecuta el archivo **main** para iniciar el procesador de transacciones para la aplicación `python3 main.py`  
 
-Opciones disponibles:
+### Opciones disponibles:
 * **set:** guardar en la Blockchain un valor registrado por un sensor
 
 ```python3 cli.py set <parameter> <value> <sensor> <timestamp> --username <username>```
