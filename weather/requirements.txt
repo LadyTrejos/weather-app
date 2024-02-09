@@ -1,0 +1,16 @@
+cbor==1.0.0
+certifi==2021.10.8
+cffi==1.15.0
+charset-normalizer==2.0.12
+colorlog==6.6.0
+idna==3.3
+protobuf==3.19.4
+pycparser==2.21
+PyYAML==6.0
+pyzmq==22.3.0
+requests==2.27.1
+sawtooth-sdk==1.2.5
+-e git+https://github.com/LadyTrejos/weather-app.git@8b1635b536ba142c5c9d556a1ddd6259e84faf30#egg=Sawtooth_Weather
+secp256k1==0.14.0
+toml==0.10.2
+urllib3==1.26.9
