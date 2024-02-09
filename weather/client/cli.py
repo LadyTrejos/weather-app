@@ -11,7 +11,7 @@ from client.client import Client
 from colorlog import ColoredFormatter
 
 DISTRIBUTION_NAME = "sawtooth-weather"
-DEFAULT_URL = "http://rest-api:8008"
+DEFAULT_URL = "http://localhost:8008"
 
 
 def create_console_handler(verbose_level):
