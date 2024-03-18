@@ -86,9 +86,9 @@ def create_parser(prog_name):
 def valid_datetime_type(arg_datetime_str):
     """custom argparse type for user datetime values given from the command line"""
     try:
-        return datetime.strptime(arg_datetime_str, "%d/%m/%Y %H:%M:%S").isoformat()
+        return datetime.strptime(arg_datetime_str, "%d/%m/%Y %H:%M:%S.%f").isoformat()
     except ValueError:
-        msg = "Given datetime ({0}) not valid. Expected format 'DD/MM/AAAA HH:mm:ss'".format(
+        msg = "Given datetime ({0}) not valid. Expected format 'DD/MM/AAAA HH:mm:ss.%f'".format(
             arg_datetime_str
         )
         raise argparse.ArgumentTypeError(msg)
@@ -211,9 +211,12 @@ def do_list(args):
     )
     print("-" * 55)
     for data in results:
-        date = datetime.strptime(data["Timestamp"], "%Y-%m-%dT%H:%M:%S").strftime(
-            "%d/%m/%Y %H:%M:%S"
-        )
+        try:
+            date = datetime.strptime(data["Timestamp"], "%Y-%m-%dT%H:%M:%S.%f").strftime(
+                "%d/%m/%Y %H:%M:%S.%f"
+            )
+        except ValueError:
+            date = data["Timestamp"]
         print(
             "{:<15} {:<8} {:<10} {:<20}".format(
                 data["Parameter"], data["Value"], data["Sensor"], date
